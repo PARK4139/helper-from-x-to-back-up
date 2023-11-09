@@ -16,6 +16,8 @@ cls
 echo "__________________________________________________________________________________________________________________________ add / commit / push
 
 
+
+
 set commit_ment=%yyyyMMddHHmmss%
 ::set commit_ment=테스트 커밋.
 ::set commit_ment=테스트 푸쉬
@@ -72,10 +74,12 @@ explorer https://github.com/PARK4139/%OPENING_DIRECTORY%
 
 
 
-
-@REM _____________________________________________________________________________________________________________________________________ debug s
-explorer "https://puppy-gallery-catalog.netlify.app/index.html"
-@REM _____________________________________________________________________________________________________________________________________ debug e
+@REM _____________________________________________________________________________________________________________________________________ python_pakage_version.log back up s
+:: python package 백업
+    call ".venv\Scripts\activate.bat"
+    pip freeze > python_pakage_version.log
+    type "python_pakage_version.log"
+@REM _____________________________________________________________________________________________________________________________________ python_pakage_version.log back up e
 
 
 
