@@ -1626,8 +1626,10 @@ while(True):
     os.system('ren "' + file_bkup + '" "' + file_bkup_with_timestamp + '"')
     os.system('move "' + file_bkup_with_timestamp + '" "' + directory_parent + '"  ')
     bkup_cnt = bkup_cnt+ 1
-    print(str(bkup_cnt) +"번 째 백업이 시도되었습니다[" + file_bkup_with_timestamp + "]")
-    os.system('echo "' + str(bkup_cnt) +"번 째 백업이 시도되었습니다[" + file_bkup_with_timestamp + "]" + '" >> ' + file_log + '"') 
+    os.system('cls') 
+    ment = str(bkup_cnt) +"번 째 백업이 시도되었습니다.      [" + file_bkup_with_timestamp + "]"
+    print(ment)
+    os.system('echo "' + ment + '" >> ' + file_log + '"') 
     # print("______________________________________________________ 생성된지 30일 된 백업파일삭제자동화 s")
     # opening_directory = "C:\Users\WIN10PROPC3\Desktop\`workspace\`bkup\old"
     # ending_directory = "C:\Users\WIN10PROPC3\Desktop\`workspace\`bkup\old\삭제대상"
