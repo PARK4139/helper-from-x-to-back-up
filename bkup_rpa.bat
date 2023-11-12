@@ -48,7 +48,7 @@ echo "__________________________________________________________________________
 call ".venv\Scripts\activate.bat"
 
 :: run python program
-py "bkup_rpa.py"
+py "C:\Users\WIN10PROPC3\Desktop\`workspace\[TO DO]\`services\back_up_RPA\bkup_rpa.py"
 
 echo "______________________________________________________________________________________________________________________________ e"
 
