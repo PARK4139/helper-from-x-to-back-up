@@ -1607,7 +1607,7 @@ while(True):
     except:
         file_origin_x=""
     file_bkup = file_origin_n + '.zip'
-    file_log = 'bkup_rpa.log'
+    file_log = 'bkup.log'
     file_bkup_with_timestamp = file_origin_n + ' - ' + getTimeAsStyle("0") + '.zip'
     os.system('chcp 65001')
     if (file_origin.split(":")[0].upper() == "C"):
