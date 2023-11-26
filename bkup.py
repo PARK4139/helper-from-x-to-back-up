@@ -1588,11 +1588,27 @@ time_s=time.time()
 print(getTimeAsStyle('0'))
 print("______________________________________________________ opening log e") 
 print("______________________________________________________ s")
-bkup_cnt=0
+bkup_try_cnt=0
 files_to_back_up = [
-    # r"C:\Users\WIN10PROPC3\Desktop\`workspace\private.toml",
-    sys.argv[1],
+    r"C:\Users\WIN10PROPC3\Desktop\`workspace\private.toml",
+    r"C:\Users\WIN10PROPC3\Desktop\`workspace\storage\`문서\무서운 이야기.ini",
 ]
+try:
+    files_to_back_up.append(sys.argv[1]),
+except Exception as e:
+    # :: e info
+    print(f'e info : {e}')
+    # :: trouble shooting info
+    print(f'traceback.print_exc(file=sys.stdout) : {traceback.print_exc(file=sys.stdout)}')
+    print(f'error id 2023 02 18 23 36')
+    try:
+        AI_speak('익셉션이 발생하였습니다')
+    except:
+        pass
+
+# :: 한글 처리
+os.system('chcp 65001')
+
 while(True):
     for file in files_to_back_up:
         # :: 파일명 준비
@@ -1608,8 +1624,10 @@ while(True):
         file_log = 'bkup.log'
         file_bkup_with_timestamp = file_n + ' - ' + getTimeAsStyle("0") + '.zip'
 
-        # :: 한글 처리
-        os.system('chcp 65001')
+        # 콘솔 화면 정리
+        if bkup_try_cnt == 0:
+            os.system('cls') 
+
 
         # :: 파일이 위치한 드라이브로 이동
         print(file_abspath.split(":")[0].upper())
@@ -1632,11 +1650,13 @@ while(True):
         os.system('ren "' + file_bkup + '" "' + file_bkup_with_timestamp + '"')
         os.system('move "' + file_bkup_with_timestamp + '" "' + directory_to_back_up + '"  ')
 
-        # :: 로깅 및 콘솔화면 정리
-        bkup_cnt = bkup_cnt+ 1
-        os.system('cls') 
-        ment = f"{str(bkup_cnt)} 번 째 백업이 시도되었습니다.    {file_bkup_with_timestamp}"
+        # :: 로깅 
+        bkup_try_cnt = bkup_try_cnt+ 1
+        ment = f"{str(bkup_try_cnt)} 번 째 백업이 시도되었습니다.    {file_bkup_with_timestamp}"
         print(ment)
+        print('')
+        print('')
+        print('')
         os.chdir(directory_to_back_up)
         os.system('echo "' + ment + '" >> ' + file_log + '"')
         
@@ -1675,13 +1695,16 @@ while(True):
                             except:
                                 traceback.print_exc(file=sys.stdout)
 
-        # print("______________________________________________________ 생성된지 30일 된 백업파일삭제자동화 e")
-        time.sleep(60)
+    # 1분 대기
+    time.sleep(60)
+
+    # 콘솔 화면 정리
+    os.system('cls') 
+
+# unreacheable code
 print("______________________________________________________ e")
 print("______________________________________________________ ending log s")
 time_e=time.time()
 print(getTimeAsStyle('0'))
 print(time_e-time_s)
 print("______________________________________________________ ending log e") 
-
-
