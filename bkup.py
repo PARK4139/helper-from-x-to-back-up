@@ -67,14 +67,10 @@ def cls():
     os.system('cls')
 
 def all_info():
-    print("______________________________________________________ 현재 pc에 연결된 드라이브 출력 s")
-    drives = win32api.GetLogicalDriveStrings()
-    drives = drives.split('\000')[:-1]
-    print(drives)
-    print("______________________________________________________ 현재 pc에 연결된 드라이브 출력 e")
-    print("______________________________________________________ 현재 디렉토리 위치 s")
-    print(os.getcwd())
-    print("______________________________________________________ 현재 디렉토리 위치 e")
+    connected_drives = win32api.GetLogicalDriveStrings().split('\000')[:-1]
+    print(f"현재 pc에 연결된 드라이브 : {connected_drives}")
+    
+    print(f"현재 디렉토리 위치 : {os.getcwd()}")
     print("______________________________________________________ 현재 디렉토리 파일의 Modified/Created/Accessed 일자 s")
     current_files = subprocess.check_output('dir /b /s /o /a-d', shell=True).decode('utf-8')  # 파일만
     lines = current_files.split("\n")
@@ -87,10 +83,10 @@ def all_info():
             pass
     print("______________________________________________________ 현재 디렉토리 파일의 일자 s")
     # print("______________________________________________________ 생성된지 7일 된 모든 확장자 파일 출력 s")
-    # os.system('forfiles /P "C:\Users\WIN10PROPC3\Desktop\`workspace" /S /M *.* /D -7 /C "cmd /c @echo @path" ')
+    # os.system('forfiles /P os.getcwd() /S /M *.* /D -7 /C "cmd /c @echo @path" ')
     # print("______________________________________________________ 생성된지 7일 된 모든 확장자 파일 출력 e")
     # print("______________________________________________________ 생성된지 1일 된 zip 확장자의 백업 파일 삭제 s")
-    # os.system('forfiles /P "C:\Users\WIN10PROPC3\Desktop\`workspace" /S /M *.zip /D -1 /C "cmd /c del @file" ')  # 2003 년 이후 설치 된 PC !주의! forfiles의 옵션이 달라서 큰 사이드 이펙트 일으킬 수 있음.
+    # os.system('forfiles /P os.getcwd() /S /M *.zip /D -1 /C "cmd /c del @file" ')  # 2003 년 이후 설치 된 PC !주의! forfiles의 옵션이 달라서 큰 사이드 이펙트 일으킬 수 있음.
     # print("______________________________________________________ 생성된지 1일 된 zip 확장자의 백업 파일 삭제 e")
     print("______________________________________________________ cmd.exe 실행 결과 한번에 출력 s")
     tmp = subprocess.check_output('dir /b /s /o /ad', shell=True).decode('utf-8')  # 폴더만
@@ -1576,16 +1572,15 @@ def is_in_(str,line):
     if str in line:
         return True
     
-    
-def mkr(str):
-    if str == "s":
-        print("______________________________________________________ mkr s")
-    elif str == "e":
-        print("______________________________________________________ mkr e")
-    else:
-        print("______________________________________________________ mkr "+str+" s")
-        print(str)
-        print("______________________________________________________ mkr "+str+" e")
+
+# :: 정규식 검색
+import re
+def is_regex_searched(string, regex):
+    pattern = re.compile(regex)
+    m = pattern.search(string)
+    if m : return True
+    else: return False
+
 
 
 print("______________________________________________________ opening log s") 
@@ -1594,79 +1589,89 @@ print(getTimeAsStyle('0'))
 print("______________________________________________________ opening log e") 
 print("______________________________________________________ s")
 bkup_cnt=0
+files_to_back_up = [
+    r"C:\Users\WIN10PROPC3\Desktop\`workspace\private.toml",
+]
 while(True):
-    file_to_back_up = r"C:\Users\WIN10PROPC3\Desktop\`workspace\private.toml"
-    directory_parent = os.path.dirname(file_to_back_up) # 부모 디렉토리
-    directory_grand_parent = os.path.dirname(directory_parent) # 조부모 디렉토리
-    # if not os.path.exists(directory_parent):
-    #     mkdir(directory_parent)
-    file_origin = os.path.abspath(file_to_back_up)
-    file_origin_n = os.path.basename(file_origin).split(".")[0]
-    try:
-        file_origin_x = os.path.basename(file_origin).split(".")[1]
-    except:
-        file_origin_x=""
-    file_bkup = file_origin_n + '.zip'
-    file_log = 'bkup.log'
-    file_bkup_with_timestamp = file_origin_n + ' - ' + getTimeAsStyle("0") + '.zip'
-    os.system('chcp 65001')
-    if (file_origin.split(":")[0].upper() == "C"):
-        os.system("c:")
-    elif (file_origin.split(":")[0].upper() == "D"):
-        os.system("d:")
-    elif (file_origin.split(":")[0].upper() == "E"):
-        os.system("e:")
-    elif (file_origin.split(":")[0].upper() == "F"):
-        os.system("f:")
-    elif (file_origin.split(":")[0].upper() == "G"):
-        os.system("g:")
-    print(file_origin.split(":")[0].upper())
-    chdir(directory_grand_parent) 
-    os.system('bz.exe c "' + file_bkup + '" "' + file_origin + '"')
-    os.system('ren "' + file_bkup + '" "' + file_bkup_with_timestamp + '"')
-    os.system('move "' + file_bkup_with_timestamp + '" "' + directory_parent + '"  ')
-    bkup_cnt = bkup_cnt+ 1
-    os.system('cls') 
-    ment = str(bkup_cnt) +"번 째 백업이 시도되었습니다.      [" + file_bkup_with_timestamp + "]"
-    print(ment)
-    os.system('echo "' + ment + '" >> ' + file_log + '"') 
-    # print("______________________________________________________ 생성된지 30일 된 백업파일삭제자동화 s")
-    # opening_directory = "C:\Users\WIN10PROPC3\Desktop\`workspace\`bkup\old"
-    # ending_directory = "C:\Users\WIN10PROPC3\Desktop\`workspace\`bkup\old\삭제대상"
-    # if not os.path.exists(ending_directory):
-    #     mkdir(ending_directory)
-    # chdir(opening_directory)  # print(os.getcwd())  # E:\PRJS_PRIVATE\prj_memo\`bkup
-    # localtime = time.localtime() # 시간을 재초기화 하는 용도로 생각됨.
-    # current_time = time.strftime('%Y-%m-%d %H:%M.%S')
-    # current_time_ =datetime.strptime(str(current_time), '%Y-%m-%d %H:%M.%S')
-    # files_in_private_bkup = subprocess.check_output('dir /b /s /o /a-d', shell=True).decode('utf-8')  # 파일만
-    # lines = files_in_private_bkup.split("\n")
-    # for line in lines:
-    #     if "" != line:
-    #         if "C:\Users\WIN10PROPC3\Desktop\`workspace" != line:
-    #             if "\\`bkup\\old\\" not in line:
-    #                 try:
-    #                     fileMtime = os.path.basename(line).split(" - ")[1][0:10].replace(" ", "-") + " " + os.path.basename(line).split(" - ")[1][11:16].replace(" ", ":") + ".00"
-    #                 except:
-    #                     fileMtime = time.strftime('%Y-%m-%d %H:%M.%S')
-    #                 fileMtime_ = datetime.strptime(str(fileMtime), '%Y-%m-%d %H:%M.%S')
-    #                 if fileMtime_ < current_time_:
-    #                     diff = current_time_ - fileMtime_
-    #                     if 30 < diff.days:
-    #                         '''
-    #                         30일 전에 생성된 파일만 정리 
-    #                         '''
-    #                         try:
-    #                             src = convert_path_style(os.path.abspath(line.strip()), "/")
-    #                             destination = convert_path_style(os.path.abspath(ending_directory), "/")
-    #                             shutil.move(src.replace("\r",""),destination.replace("\r",""))
-    #                             print(src + "--> 해당 파일은 30일 전에 생성된 오래된 파일이므로 자동정리 되었습니다")
-    #                             os.system('echo "' + src + "--> 해당 파일은 30일 전에 생성된 오래된 파일이므로 자동정리 되었습니다\" >> 파일삭제자동화.log")
-    #                             pass
-    #                         except:
-    #                             traceback.print_exc(file=sys.stdout)
-    # print("______________________________________________________ 생성된지 30일 된 백업파일삭제자동화 e")
-    time.sleep(60)
+    for file in files_to_back_up:
+        directory_to_back_up = os.path.dirname(file) 
+        directory_parent = os.path.dirname(directory_to_back_up) 
+        file_origin = os.path.abspath(file)
+        file_origin_n = os.path.basename(file_origin).split(".")[0]
+        try:
+            file_origin_x = os.path.basename(file_origin).split(".")[1]
+        except:
+            file_origin_x=""
+        file_bkup = file_origin_n + '.zip'
+        file_log = 'bkup.log'
+        file_bkup_with_timestamp = file_origin_n + ' - ' + getTimeAsStyle("0") + '.zip'
+        os.system('chcp 65001')
+        if (file_origin.split(":")[0].upper() == "C"):
+            os.system("c:")
+        elif (file_origin.split(":")[0].upper() == "D"):
+            os.system("d:")
+        elif (file_origin.split(":")[0].upper() == "E"):
+            os.system("e:")
+        elif (file_origin.split(":")[0].upper() == "F"):
+            os.system("f:")
+        elif (file_origin.split(":")[0].upper() == "G"):
+            os.system("g:")
+        print(file_origin.split(":")[0].upper())
+        chdir(directory_parent) 
+        os.system('bz.exe c "' + file_bkup + '" "' + file_origin + '"')
+        os.system('ren "' + file_bkup + '" "' + file_bkup_with_timestamp + '"')
+        os.system('move "' + file_bkup_with_timestamp + '" "' + directory_to_back_up + '"  ')
+        bkup_cnt = bkup_cnt+ 1
+        os.system('cls') 
+        ment = str(bkup_cnt) +"번 째 백업이 시도되었습니다.    [" + file_bkup_with_timestamp + "]"
+        print(ment)
+        chdir(directory_to_back_up)
+        os.system('echo "' + ment + '" >> ' + file_log + '"')
+        # print("______________________________________________________ 생성된지 30일 된 백업파일삭제자동화 s")
+        os.chdir(directory_to_back_up)
+        # print(f"현재 디렉토리 위치 : {os.getcwd()}")
+        # :: 현재 디렉토리에서 zip 확장자 파일만 문자열 리스트로 가져오기
+        lines = subprocess.check_output('dir /b /a-d *.zip', shell=True).decode('utf-8').split("\n")
+        for line in lines:
+            if "" != line:
+                if os.getcwd() != line:
+                    if is_regex_searched(line,r"\d{4} \d{2} \d{2} \d{2} \d{2} \d{2}.zip") == True:
+                        import re
+                        from datetime import timedelta
+                        time_to_backed_up = re.findall(r"\d{4} \d{2} \d{2} \d{2} \d{2} \d{2}", line)
+                        time_to_backed_up_ = time_to_backed_up[0][0:10].replace(" ", "-") + " " + time_to_backed_up[0][11:16].replace(" ", ":") + ".00"
+                        time_to_backed_up__ = datetime.strptime(str(time_to_backed_up_), '%Y-%m-%d %H:%M.%S')
+                        time_current = datetime.now()
+
+                        destination = directory_to_back_up+ '\\.old'
+                        if not os.path.exists(destination):
+                            os.makedirs(destination)   # project tree 를 만들어주는 편리한 명령어
+
+                        # :: 지금부터 7일 이전의 파일만 
+                        # if diff.days <-7: 
+                            # diff = time_to_backed_up__ - time_current
+                            # print(f"time_to_backed_up__ : {time_to_backed_up__}")
+                            # print(f"time_current : {time_current}")
+                            # print(f"diff.microseconds : {diff.microseconds}")
+                            # print(f"line : {line}")
+ 
+        
+                        # :: 지금부터 5분(300 seconds) 이전의 파일만 
+                        change_min = time_current - timedelta(seconds= 300)
+                        diff = time_to_backed_up__ - change_min
+                        if 300 < diff.seconds: 
+                            try: 
+                                src = convert_path_style(os.path.abspath(line.strip()), "/")
+                                destination = convert_path_style(os.path.abspath(destination), "/")
+                                shutil.move(src, destination) 
+                                print(f"{'해당 파일은 지금부터 5분(300 seconds) 이전에 생성된 오래된 파일이므로 자동정리 되었습니다'} , {src} ,  {destination}")
+                            except:
+                                traceback.print_exc(file=sys.stdout)
+ 
+                        
+
+        # print("______________________________________________________ 생성된지 30일 된 백업파일삭제자동화 e")
+        time.sleep(60)
 print("______________________________________________________ e")
 print("______________________________________________________ ending log s")
 time_e=time.time()
