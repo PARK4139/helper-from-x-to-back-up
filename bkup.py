@@ -1588,14 +1588,18 @@ time_s=time.time()
 print(getTimeAsStyle('0'))
 print("______________________________________________________ opening log e") 
 print("______________________________________________________ s")
-bkup_try_cnt=0
-files_to_back_up = [
-    r"C:\Users\WIN10PROPC3\Desktop\`workspace\private.toml",
-    r"C:\Users\WIN10PROPC3\Desktop\`workspace\storage\`문서\무서운 이야기.ini",
-]
+# :: 한글 처리
+os.system('chcp 65001')
+
+
 try:
-    files_to_back_up.append(sys.argv[1]),
+    files_to_back_up = [
+        sys.argv[1]
+    ]
 except Exception as e:
+    files_to_back_up = [
+        r"C:\Users\WIN10PROPC3\Desktop\`workspace\private.toml",
+    ]
     # :: e info
     print(f'e info : {e}')
     # :: trouble shooting info
@@ -1605,10 +1609,12 @@ except Exception as e:
         AI_speak('익셉션이 발생하였습니다')
     except:
         pass
+    pass
 
-# :: 한글 처리
-os.system('chcp 65001')
+# :: 로깅
+bkup_try_cnt=0
 
+# :: 루프 시작
 while(True):
     for file in files_to_back_up:
         # :: 파일명 준비
