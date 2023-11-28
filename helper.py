@@ -1633,28 +1633,30 @@ while(True):
         # 콘솔 화면 정리
         if bkup_try_cnt == 0:
             os.system('cls') 
-
+        
 
         # :: 파일이 위치한 드라이브로 이동
-        print(file_abspath.split(":")[0].upper())
-        if (file_abspath.split(":")[0].upper() == "C"):
-            os.system("c:")
-        elif (file_abspath.split(":")[0].upper() == "D"):
-            os.system("d:")
-        elif (file_abspath.split(":")[0].upper() == "E"):
-            os.system("e:")
-        elif (file_abspath.split(":")[0].upper() == "F"):
-            os.system("f:")
-        elif (file_abspath.split(":")[0].upper() == "G"):
-            os.system("g:")
+        drives = [
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+        ]
+        drive_where_file_is_located = file_abspath.split(":")[0].upper()
+        for drive in drives:
+            if (drive_where_file_is_located == drive):
+                subprocess.check_output(f"{drive}:", shell=True).decode('utf-8').split("\n")
+                print(file_abspath.split(":")[0].upper())
+
         
         # :: 백업할 디렉토리의 부모디렉토리로 이동
         # 하위 명령어 사용 시 백업할 디렉토리의 부모 디렉토리에서 명령어를 수행해야 해야 에러가 없다.
         # bz.exe 는 반디집에서 제공하는 CLI 기반 명령어 이다.
         os.chdir(directory_parent) 
-        os.system('bz.exe c "' + file_bkup + '" "' + file_abspath + '"')
-        os.system('ren "' + file_bkup + '" "' + file_bkup_with_timestamp + '"')
-        os.system('move "' + file_bkup_with_timestamp + '" "' + directory_to_back_up + '"  ')
+        subprocess.check_output(f'bz.exe c "{file_bkup}" "{file_abspath}"', shell=True).decode('utf-8').split("\n")
+        subprocess.check_output(f'ren "{file_bkup}" "{file_bkup_with_timestamp}"', shell=True).decode('utf-8').split("\n")
+        subprocess.check_output(f'move "{file_bkup_with_timestamp}" "{directory_to_back_up}" ', shell=True).decode('utf-8').split("\n")
 
         # :: 로깅 
         bkup_try_cnt = bkup_try_cnt+ 1
@@ -1664,7 +1666,7 @@ while(True):
         print('')
         print('')
         os.chdir(directory_to_back_up)
-        os.system('echo "' + ment + '" >> ' + file_log + '"')
+        os.system(f'echo "{ment}" >> {file_log}"')
         
         # :: 현재 디렉토리에서 zip 확장자 파일만 문자열 리스트로 출력
         lines = subprocess.check_output('dir /b /a-d *.zip', shell=True).decode('utf-8').split("\n")
@@ -1697,7 +1699,7 @@ while(True):
                                 src = convert_path_style(os.path.abspath(line.strip()), "/")
                                 destination = convert_path_style(os.path.abspath(destination), "/")
                                 shutil.move(src, destination) 
-                                print(f"{'해당 파일 파일자동정리되었습니다'} , {src} ,  {destination}")
+                                print(f"{'해당 파일 파일자동정리되었습니다'} ,src: {src} ,destination: {destination}")
                             except:
                                 traceback.print_exc(file=sys.stdout)
 

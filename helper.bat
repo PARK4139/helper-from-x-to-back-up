@@ -46,8 +46,7 @@ cls
 call ".venv\Scripts\activate.bat"
 
 :: run python program
-py ".\helper.py"
-:: py ".\helper.py"
+py ".\helper.py" "F:\`workspace\`\#몰티 뭐야 이게!!!ㅋㅋㅋ ★전국 농 페스티벌 준우승★에 빛나는 진호의 넝 담│#코미디빅리그│#diggle 000014.mp4"
 
 
 :: debugging
