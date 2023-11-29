@@ -240,7 +240,6 @@ def tasklist():
 
 
 def taskkill(target_str):
-    # target_str = 'Music.UI.exe'
     for proc in psutil.process_iter():
         try:
             process_im_name = proc.name()
@@ -253,8 +252,6 @@ def taskkill(target_str):
                 for child in parent.children(recursive=True):
                     child.kill()
                 parent.kill()
-                # print(target_str+' 와 자식 프로세스 죽이기를 시도했습니다')
-
         except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):  # 예외처리
             pass
 
@@ -1256,44 +1253,23 @@ def AI_respon(usr_input_txt):
 
 
 def AI_speak(text):
-    # address=r""+os.getcwd()+'\\mp3\\음성인식 준비되었습니다.mp3'
-    # address=u""+os.getcwd()+'\\mp3\\음성인식 준비되었습니다.mp3'
-    # address=os.getcwd()+'\\mp3\\음성인식 준비되었습니다.mp3'
     address = os.getcwd() + '\\mp3\\' + text + '.mp3'
-
+    # :: 가지고 있는 mp3 파일 확인
     if os.path.exists(address):
-        # print('파일이 있어 재생을 시도합니다')
-        # os.system('"'+address+'"')#SUCCESS
         os.system('call "' + address + '"')  # SUCCESS[경로공백포함 시 인식처리]
-
-        # mp3 파일의 재생 길이를 알아내서 그 시간만큼 sleep 시키는 코드를 추가[to do]
-        length_of_mp3 = get_length_of_mp3(address)
-        # print(length_of_mp3)
-        length_of_mp3 = float(length_of_mp3)
-        # print(length_of_mp3)
-        length_of_mp3 = round(length_of_mp3, 1)
-        # print(length_of_mp3)
-        # time.sleep(length_of_mp3*0.95)
-        # time.sleep(length_of_mp3*1.00)
-        time.sleep(length_of_mp3 * 1.05)
-
-
+        
     else:
-        # print('가지고 있는 mp3 파일이 없어 생성을 시도합니다')
         mgr_gTTS = gTTS(text=text, lang='ko')
         mgr_gTTS.save('./mp3/' + text + '.mp3')
         os.system('call "' + address + '"')  # call을 사용해서 동기처리를 기대했으나 되지 않음.대안이 필요하다.
 
-        # mp3 파일의 재생 길이를 알아내서 그 시간만큼 sleep 시키는 코드를 추가[to do]
-        length_of_mp3 = get_length_of_mp3(address)
-        # print(length_of_mp3)
-        length_of_mp3 = float(length_of_mp3)
-        # print(length_of_mp3)
-        length_of_mp3 = round(length_of_mp3, 1)
-        # print(length_of_mp3)
-        # time.sleep(length_of_mp3*0.95)
-        # time.sleep(length_of_mp3*1.00)
-        time.sleep(length_of_mp3 * 1.05)
+    # :: mp3 파일의 재생 길이 만큼 대기 
+    length_of_mp3 = get_length_of_mp3(address)
+    length_of_mp3 = float(length_of_mp3)
+    length_of_mp3 = round(length_of_mp3, 1)
+    # time.sleep(length_of_mp3*0.95)
+    # time.sleep(length_of_mp3*1.00)
+    time.sleep(length_of_mp3 * 1.05)
 
     taskkill('ALSong.exe')
 
@@ -1588,9 +1564,9 @@ time_s=time.time()
 print(getTimeAsStyle('0'))
 print("______________________________________________________ opening log e") 
 print("______________________________________________________ s")
+
 # :: 한글 처리
 os.system('chcp 65001')
-
 
 try:
     files_to_back_up = [
@@ -1598,18 +1574,15 @@ try:
     ]
 except Exception as e:
     files_to_back_up = [
-        r"C:\Users\WIN10PROPC3\Desktop\`workspace\private.toml",
+        r"C:\Users\WIN10PROPC3\Desktop\`workspace\private.toml"
     ]
     # :: e info
     print(f'e info : {e}')
     # :: trouble shooting info
     print(f'traceback.print_exc(file=sys.stdout) : {traceback.print_exc(file=sys.stdout)}')
     print(f'error id 2023 02 18 23 36')
-    try:
-        AI_speak('익셉션이 발생하였습니다')
-    except:
-        pass
     pass
+ 
 
 # :: 로깅
 bkup_try_cnt=0
@@ -1646,8 +1619,8 @@ while(True):
         drive_where_file_is_located = file_abspath.split(":")[0].upper()
         for drive in drives:
             if (drive_where_file_is_located == drive):
-                subprocess.check_output(f"{drive}:", shell=True).decode('utf-8').split("\n")
-                print(file_abspath.split(":")[0].upper())
+                os.system(rf"{drive}:")
+                # print(file_abspath.split(":")[0].upper())
 
         
         # :: 백업할 디렉토리의 부모디렉토리로 이동
@@ -1681,15 +1654,20 @@ while(True):
                         time_to_backed_up__ = datetime.strptime(str(time_to_backed_up_), '%Y-%m-%d %H:%M.%S')
                         time_current = datetime.now()
                         
+
                         # :: project tree 생성
                         destination = directory_to_back_up+ '\\.old'
-                        if not os.path.exists(destination):
+                        try:
                             os.makedirs(destination)   
+                        except:
+                            pass
 
+                        
                         # :: 지금부터 7일 이전의 파일만 
                         # diff = time_to_backed_up__ - time_current
                         # if diff.days <-7: 
                             # print(f"line : {line}")
+        
         
                         # :: 지금부터 5분(300 seconds) 이전의 파일만 
                         change_min = time_current - timedelta(seconds= 300)
@@ -1705,6 +1683,9 @@ while(True):
 
     # 1분 대기
     time.sleep(60)
+
+    # 
+    AI_speak('fake AI 를 종료합니다')
 
     # 콘솔 화면 정리
     os.system('cls') 

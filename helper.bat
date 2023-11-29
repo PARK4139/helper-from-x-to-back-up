@@ -42,11 +42,14 @@ setlocal
 :: 콘솔 화면 정리
 cls
 
+:: 프로젝트로 이동
+cd "C:\Users\WIN10PROPC3\Desktop\services\helper-from-x-to-back_up"
+
 :: venv running
 call ".venv\Scripts\activate.bat"
 
 :: run python program
-py ".\helper.py" "F:\`workspace\`\#몰티 뭐야 이게!!!ㅋㅋㅋ ★전국 농 페스티벌 준우승★에 빛나는 진호의 넝 담│#코미디빅리그│#diggle 000014.mp4"
+py ".\helper.py" 
 
 
 :: debugging
