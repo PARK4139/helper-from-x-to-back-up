@@ -21,3 +21,6 @@ OS 변수를 고빈도로 활용해볼 것
 2023 11 28 23:12:20 프로젝트명 을 back_up 에서 helper-from-X-to-back_up 로 변경
 2023 11 29 10:45:11 프로젝트 종료 잠정 
  
+
+ # example
+python helper.py "%USERPROFILE%\Desktop\services\helper-from-x-to-back_up\success.log"

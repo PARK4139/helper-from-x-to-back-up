@@ -67,11 +67,17 @@ def cls():
     os.system('cls')
 
 def all_info():
-    connected_drives = win32api.GetLogicalDriveStrings().split('\000')[:-1]
-    print(f"현재 pc에 연결된 드라이브 : {connected_drives}")
-    
+
+    # :: get 현재 pc에 연결된 드라이브
+    # connected_drives = win32api.GetLogicalDriveStrings().split('\000')[:-1]
+    # print(f"현재 pc에 연결된 드라이브 : {connected_drives}")
+    print(f"현재 pc에 연결된 드라이브 : {win32api.GetLogicalDriveStrings().split('\000')[:-1]}")
+
+    # :: get 현재 디렉토리 위치
     print(f"현재 디렉토리 위치 : {os.getcwd()}")
-    print("______________________________________________________ 현재 디렉토리 파일의 Modified/Created/Accessed 일자 s")
+
+
+    # :: get 현재 디렉토리 파일의 Modified/Created/Accessed 일자
     current_files = subprocess.check_output('dir /b /s /o /a-d', shell=True).decode('utf-8')  # 파일만
     lines = current_files.split("\n")
     for line in lines:
@@ -79,32 +85,31 @@ def all_info():
             print("Modified : "+time.ctime(os.path.getmtime(line)))
             print("Created : "+time.ctime(os.path.getctime(line)))
             print("Accessed : "+time.ctime(os.path.getatime(line)))
-        except:
+        except Exception as e:
             pass
-    print("______________________________________________________ 현재 디렉토리 파일의 일자 s")
+    
+    # :: get 현재 디렉토리 파일의 일자
     # print("______________________________________________________ 생성된지 7일 된 모든 확장자 파일 출력 s")
     # os.system('forfiles /P os.getcwd() /S /M *.* /D -7 /C "cmd /c @echo @path" ')
     # print("______________________________________________________ 생성된지 7일 된 모든 확장자 파일 출력 e")
     # print("______________________________________________________ 생성된지 1일 된 zip 확장자의 백업 파일 삭제 s")
     # os.system('forfiles /P os.getcwd() /S /M *.zip /D -1 /C "cmd /c del @file" ')  # 2003 년 이후 설치 된 PC !주의! forfiles의 옵션이 달라서 큰 사이드 이펙트 일으킬 수 있음.
     # print("______________________________________________________ 생성된지 1일 된 zip 확장자의 백업 파일 삭제 e")
-    print("______________________________________________________ cmd.exe 실행 결과 한번에 출력 s")
-    tmp = subprocess.check_output('dir /b /s /o /ad', shell=True).decode('utf-8')  # 폴더만
-    tmp = subprocess.check_output('dir /b /s /o /a-d', shell=True).decode('utf-8')   # 파일만
-    tmp = subprocess.check_output('dir /b /s /o /a', shell=True).decode('utf-8')   # 전부
+
+
+    
+    tmp = subprocess.check_output('dir /b /s /o /ad', shell=True).decode('utf-8')  # 폴더만 with walking
+    tmp = subprocess.check_output('dir /b /s /o /a-d', shell=True).decode('utf-8') # 파일만 with walking
+    tmp = subprocess.check_output('dir /b /s /o /a', shell=True).decode('utf-8')   # 전부 with walking
     print(tmp)
-    print("______________________________________________________ cmd.exe 실행 결과 한번에 출력 e")
-    # print("______________________________________________________ cmd.exe 실행 결과 한줄씩 출력 [실패] s")
-    # current_files = os.popen('dir /b /s /o /a').readlines()    # 전부
-    # current_files = os.popen('dir /b /s /o /ad').readlines()   # 폴더만
-    # current_files = os.popen('dir /b /s /o /a-d').readlines()  # 파일만
-    # for tmp in current_files:
-    #     print(tmp)
-    # print("______________________________________________________ cmd.exe 실행 결과 한줄씩 출력 [실패] e")
-    print("______________________________________________________ 현재 디렉토리 파일만 사이즈 출력 s")
-    # current_files = os.popen('dir /b /s /o /a').readlines()    # 전부
-    # current_files = os.popen('dir /b /s /o /ad').readlines()   # 폴더만
-    current_files = subprocess.check_output('dir /b /s /o /a-d', shell=True).decode('utf-8')   # 파일만
+    
+
+
+        
+    # :: 현재 디렉토리 파일만 사이즈 출력
+    # current_files = os.popen('dir /b /s /o /a').readlines()    # 전부 with walking
+    # current_files = os.popen('dir /b /s /o /ad').readlines()   # 폴더만 with walking
+    current_files = subprocess.check_output('dir /b /s /o /a-d', shell=True).decode('utf-8')   # 파일만 with walking
     lines=current_files.split("\n")
     for line in lines:
         try:
@@ -115,10 +120,11 @@ def all_info():
                 print(line.strip() + " : " + str(round(os.path.getsize(line.strip()) / (1024.0 * 1024.0),2))+' MB')
             else:
                 print(line.strip() + " : " + str(round(os.path.getsize(line.strip()) / (1024.0 * 1024.0 * 1024.0),2)) + ' GB')
-        except:
+        except Exception as e:
             pass
-    print("______________________________________________________ 현재 디렉토리 파일만 사이즈 출력 e")
-    print("______________________________________________________ 현재 디렉토리 파일만 사이즈 출력2 s")
+    
+    
+    # :: 현재 디렉토리 파일만 사이즈 출력 2
     def convert_size(size_bytes):
         import math
         if size_bytes == 0:
@@ -133,10 +139,11 @@ def all_info():
     for line in lines:
         try:
             print(line.strip() + "{{seperator}}" + str(convert_size(os.path.getsize(line.strip()))))
-        except:
+        except Exception as e:
             pass
-    print("______________________________________________________ 현재 디렉토리 파일만 사이즈 출력2 e")
-    print("______________________________________________________ 현재 디렉토리 파일만 생성일자 출력 s")
+    
+    
+    # :: 현재 디렉토리 파일생성일자 출력 with walking
     current_files = subprocess.check_output('dir /b /s /o /a-d', shell=True).decode('utf-8')   # 파일만
     lines=current_files.split("\n")
     for line in lines:
@@ -146,7 +153,7 @@ def all_info():
             # print(line.strip() + "{{seperator}}" + str(os.path.getctime(line.strip())))
             # print(line.strip() + "{{seperator}}" + str(datetime.datetime.fromtimestamp(os.path.getctime(line.strip())).strftime('%Y-%m-%d %H:%M:%S')))
             print(line.strip() + "{{seperator}}" + str(time.ctime(os.path.getmtime(line.strip()))))
-        except:
+        except Exception as e:
             pass
     print("______________________________________________________ 현재 디렉토리 파일만 생성일자 출력 e")
     print("______________________________________________________ 20230414 18:00 이후 생성된 파일 출력 s")
@@ -188,19 +195,7 @@ def all_info():
 
 
 
-magical_words = {
-    'as_str': 'as_str',
-    'as_list': 'as_list',
-    'and_do_nothing': 'and_do_nothing',
-    'and_get_it': 'and_get_it',
-    'and_print': 'and_print',
-    'void': 'void',
-    'return': 'return',
-    'print': 'print',
-    1: 1,
-    2: 2,
-    3: 3,
-} 
+
 
 def chdir(path):
     os.chdir(path)
@@ -224,7 +219,7 @@ def get_length_of_mp3(target_address):
         audio = MP3(target_address)
         # print(audio.info.length)
         return audio.info.length
-    except:
+    except Exception as e:
         print('get_length_of_mp3 메소드에서 에러가 발생하였습니다')
 
 
@@ -351,16 +346,16 @@ def AI_respon(usr_input_txt):
         pass
 
     elif usr_input_txt == 'x':
-        AI_speak('fake AI 를 종료합니다')
+        print('fake AI 를 종료합니다')
         exit()
 
     elif usr_input_txt == '미세먼지랭킹':
-        # AI_speak('미세먼지랭킹 날씨 정보를 디스플레이 시도합니다')
+        # print('미세먼지랭킹 날씨 정보를 디스플레이 시도합니다')
         # AI_run('https://www.dustrank.com/air/air_dong_detail.php?addcode=41173103')
-        # AI_speak('시도완료했습니다')
-        # AI_speak('미세먼지랭킹 날씨 정보에 접근을 시도합니다')
-        # AI_speak('미세먼지랭킹 정보 접근 시도')
-        # AI_speak('미세먼지랭킹 정보')
+        # print('시도완료했습니다')
+        # print('미세먼지랭킹 날씨 정보에 접근을 시도합니다')
+        # print('미세먼지랭킹 정보 접근 시도')
+        # print('미세먼지랭킹 정보')
         AI_run('https://www.dustrank.com/air/air_dong_detail.php?addcode=41173103')
 
     elif usr_input_txt == '종합날씨':
@@ -377,18 +372,18 @@ def AI_respon(usr_input_txt):
         HH = getTimeAsStyle('8')
         mm = getTimeAsStyle('9')
         ss = getTimeAsStyle('10')
-        AI_speak('현재 시간은')
-        AI_speak(yyyy + '년')
-        AI_speak(MM + '월')
-        AI_speak(dd + '일')
-        AI_speak(HH + '시')
-        AI_speak(mm + '분')
-        AI_speak(ss + '초')
-        AI_speak('입니다')
+        print('현재 시간은')
+        print(yyyy + '년')
+        print(MM + '월')
+        print(dd + '일')
+        print(HH + '시')
+        print(mm + '분')
+        print(ss + '초')
+        print('입니다')
         pass
 
     elif usr_input_txt == '초미세먼지':
-        # AI_speak('네이버 초미세먼지 정보 웹크롤링을 시도합니다.')
+        # print('네이버 초미세먼지 정보 웹크롤링을 시도합니다.')
         dataWebLocation = "https://search.naver.com/search.naver?where=nexearch&sm=tab_etc&qvt=0&query=%EC%A0%84%EA%B5%AD%EC%B4%88%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80"
         copied_html_selector = '#main_pack > section.sc_new._atmospheric_environment > div > div.api_cs_wrap > div > div:nth-child(3) > div.main_box > div.detail_box'
 
@@ -403,26 +398,26 @@ def AI_respon(usr_input_txt):
                                                                                                     "\n대구").replace(
             "울산", "\n울산").replace("부산", "\n부산").replace("     ", " ").replace("\n ", "\n").replace("  ", " ").replace(
             "  ", " ")
-        # AI_speak('웹크롤링이 완료되었습니다')
-        # AI_speak('서울과 경기도에 대한 초미세먼지 정보를 말씀드립니다')
-        AI_speak('서울 경기도 초미세먼지 정보')
+        # print('웹크롤링이 완료되었습니다')
+        # print('서울과 경기도에 대한 초미세먼지 정보를 말씀드립니다')
+        print('서울 경기도 초미세먼지 정보')
 
         # for line in range(0,len(lines.split('\n'))):
-        # AI_speak(lines.split('\n')[line])
+        # print(lines.split('\n')[line])
 
         # for line in range(0,len(lines.split(' '))):
-        # AI_speak(lines.split(' ')[line].strip())
+        # print(lines.split(' ')[line].strip())
 
         for line in range(0, len(lines.split('\n'))):
             if '서울' in lines.split('\n')[line]:
                 tmp = lines.split('\n')[line].split(' ')
                 for i in range(0, len(tmp) - 3):
-                    AI_speak(tmp[i])
+                    print(tmp[i])
 
             if '경기' in lines.split('\n')[line]:
                 tmp = lines.split('\n')[line].split(' ')
                 for i in range(0, len(tmp) - 3):
-                    AI_speak(tmp[i])
+                    print(tmp[i])
 
 
 
@@ -440,16 +435,16 @@ def AI_respon(usr_input_txt):
         # copied_html_selector = '#oFNiHe > div > div > div > div.eKPi4 > span.BBwThe'
         # 구글 지역 정보 option e # 구글 지역 정보 option e # 구글 지역 정보 option e # 구글 지역 정보 option e # 구글 지역 정보 option e # 구글 지역 정보 option e
 
-        # AI_speak(INFO_NAME+nbsp+'웹크롤링을 시도합니다')
-        # AI_speak('웹크롤링이 완료되었습니다')
-        # AI_speak('현재위치에 대한 정보를 말씀드립니다')
+        # print(INFO_NAME+nbsp+'웹크롤링을 시도합니다')
+        # print('웹크롤링이 완료되었습니다')
+        # print('현재위치에 대한 정보를 말씀드립니다')
         lines = AI_Crawlweb(dataWebLocation, copied_html_selector)
         # AI_print(lines)
         # print(lines)
-        # AI_speak(INFO_NAME +'크롤링 결과를 말씀드립니다')
-        AI_speak(INFO_NAME + '는')
-        AI_speak(lines.strip())
-        AI_speak('인 것으로 추측됩니다')
+        # print(INFO_NAME +'크롤링 결과를 말씀드립니다')
+        print(INFO_NAME + '는')
+        print(lines.strip())
+        print('인 것으로 추측됩니다')
 
 
     elif usr_input_txt == '체감온도':  # [웹 스크랩핑 및 유효텍스트 파싱]
@@ -479,9 +474,9 @@ def AI_respon(usr_input_txt):
         element_str = element.text
         print(element_str)
 
-        AI_speak(INFO_NAME + '는')
-        AI_speak(element_str.strip())
-        AI_speak('인 것으로 추측됩니다')
+        print(INFO_NAME + '는')
+        print(element_str.strip())
+        print('인 것으로 추측됩니다')
 
     elif usr_input_txt == '미세먼지':
         try:
@@ -505,18 +500,17 @@ def AI_respon(usr_input_txt):
             selenium_browser_mgr.quit()
 
             # print(element_str)
-            AI_speak('미세먼지')
-            # AI_speak(element_str.strip())
+            print('미세먼지')
+            # print(element_str.strip())
         except Exception as e:
             print('______________________________________________________  error id 2023 02 18 23 36 s')
-            print('______________________________________________________  e info s')
-            print(e)
-            print('______________________________________________________  e info e')
-            print('______________________________________________________  trouble shooting info s')
-            traceback.print_exc(file=sys.stdout)
-            print('______________________________________________________  trouble shooting info e')
+            # :: trouble shooting
+            print(f':: trouble shooting id : 20231129111853')
+            print(f'e : {e}')
+            print(f'traceback.print_exc(file=sys.stdout) : {traceback.print_exc(file=sys.stdout)}')
+            # traceback.print_exc(file=sys.stdout)
             print('______________________________________________________  error id 2023 02 18 23 36 e')
-            AI_speak('익셉션이 발생하였습니다')
+            print('익셉션이 발생하였습니다')
 
 
     elif usr_input_txt == '위드비전 근태관리':
@@ -582,18 +576,17 @@ def AI_respon(usr_input_txt):
 
 
             # print(element_str)
-            AI_speak('미세먼지')
-            # AI_speak(element_str.strip())
+            print('미세먼지')
+            # print(element_str.strip())
         except Exception as e:
             print('______________________________________________________  error id 2023 02 18 23 36 s')
-            print('______________________________________________________  e info s')
-            print(e)
-            print('______________________________________________________  e info e')
-            print('______________________________________________________  trouble shooting info s')
-            traceback.print_exc(file=sys.stdout)
-            print('______________________________________________________  trouble shooting info e')
+            # :: trouble shooting
+            print(f':: trouble shooting id : 20231129111853')
+            print(f'e : {e}')
+            print(f'traceback.print_exc(file=sys.stdout) : {traceback.print_exc(file=sys.stdout)}')
+            # traceback.print_exc(file=sys.stdout)
             print('______________________________________________________  error id 2023 02 18 23 36 e')
-            AI_speak('익셉션이 발생하였습니다')
+            print('익셉션이 발생하였습니다')
 
     elif usr_input_txt == '종합날씨정보':
 
@@ -624,9 +617,9 @@ def AI_respon(usr_input_txt):
             continue
         element_str = element.text.strip()
         print(element_str)
-        AI_speak('기온')
-        AI_speak(element_str.strip().replace('°', ''))
-        AI_speak('도')
+        print('기온')
+        print(element_str.strip().replace('°', ''))
+        print('도')
         print("______________________________________________________ 현재온도] ")
         copied_html_selector = '#main_pack > section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.content_wrap > div.open > div:nth-child(1) > div > div.weather_info > div > div._today > div.weather_graphic > div.temperature_text > strong'
         elements = soup.select(copied_html_selector)
@@ -635,9 +628,9 @@ def AI_respon(usr_input_txt):
             continue
         element_str = element.text.strip().replace('현재 온도', '')
         print(element_str)
-        AI_speak('현재온도')
-        AI_speak(element_str.replace('°', ''))
-        AI_speak('도')
+        print('현재온도')
+        print(element_str.replace('°', ''))
+        print('도')
         print("______________________________________________________ 체감온도] ")
         copied_html_selector = '#main_pack > section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.content_wrap > div.open > div:nth-child(1) > div > div.weather_info > div > div._today > div.temperature_info > dl > dd:nth-child(2)'
         elements = soup.select(copied_html_selector)
@@ -646,9 +639,9 @@ def AI_respon(usr_input_txt):
             continue
         element_str = element.text.strip()
         print(element_str)
-        AI_speak('체감온도')
-        AI_speak(element_str.replace('°', ''))
-        AI_speak('도')
+        print('체감온도')
+        print(element_str.replace('°', ''))
+        print('도')
         print("______________________________________________________ 습도] ")
         copied_html_selector = '#main_pack > section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.content_wrap > div.open > div:nth-child(1) > div > div.weather_info > div > div._today > div.temperature_info > dl > dd:nth-child(4)'
         elements = soup.select(copied_html_selector)
@@ -657,9 +650,9 @@ def AI_respon(usr_input_txt):
             continue
         element_str = element.text.strip()
         print(element_str)
-        AI_speak('습도')
-        AI_speak(element_str.replace('%', ''))
-        AI_speak('퍼센트')
+        print('습도')
+        print(element_str.replace('%', ''))
+        print('퍼센트')
         print("______________________________________________________ 바람] ")
         copied_html_selector = '#main_pack > section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.content_wrap > div.open > div:nth-child(1) > div > div.weather_info > div > div._today > div.temperature_info > dl > dd:nth-child(6)'
         elements = soup.select(copied_html_selector)
@@ -668,9 +661,9 @@ def AI_respon(usr_input_txt):
             continue
         element_str = element.text
         print(element_str)
-        AI_speak('바람')
-        AI_speak(element_str.strip().replace('m/s', ''))
-        AI_speak('미터퍼세크')
+        print('바람')
+        print(element_str.strip().replace('m/s', ''))
+        print('미터퍼세크')
         print("______________________________________________________ 자외선] ")
         copied_html_selector = '#main_pack > section.sc_new.cs_weather_new._cs_weather > div._tab_flicking > div.content_wrap > div.open > div:nth-child(1) > div > div.weather_info > div > div.report_card_wrap > ul > li.item_today.level2 > a > span'
         elements = soup.select(copied_html_selector)
@@ -679,8 +672,8 @@ def AI_respon(usr_input_txt):
             continue
         element_str = element.text
         print(element_str)
-        AI_speak('자외선')
-        AI_speak(element_str.strip())
+        print('자외선')
+        print(element_str.strip())
         print("______________________________________________________ 미세먼지] ")
         # 미세먼지랭킹 미세먼지 정보 s# 미세먼지랭킹 미세먼지 정보 s# 미세먼지랭킹 미세먼지 정보 s# 미세먼지랭킹 미세먼지 정보 s
         INFO_NAME = '미세먼지랭킹 미세먼지 정보'
@@ -696,8 +689,8 @@ def AI_respon(usr_input_txt):
             continue
         element_str = element.text
         print(element_str)
-        AI_speak('미세먼지')
-        AI_speak(element_str.strip().replace('m/s', ''))
+        print('미세먼지')
+        print(element_str.strip().replace('m/s', ''))
         print("______________________________________________________ 초미세먼지] ")
         copied_html_selector = '#body_main > table:nth-child(7) > tbody > tr:nth-child(2) > td:nth-child(2) > div'
         elements = soup.select(copied_html_selector)
@@ -706,9 +699,9 @@ def AI_respon(usr_input_txt):
             continue
         element_str = element.text
         print(element_str)
-        AI_speak('초미세먼지')
-        AI_speak(element_str.strip())
-        AI_speak('입니다')
+        print('초미세먼지')
+        print(element_str.strip())
+        print('입니다')
 
         # print("______________________________________________________ _________] ")
         # copied_html_selector = '_________'
@@ -717,7 +710,7 @@ def AI_respon(usr_input_txt):
 
     elif usr_input_txt == 'hardcode json 처리':
         print("______________________________________________________ json 처리 시작] ")
-        AI_speak('준비중인 기능입니다')
+        print('준비중인 기능입니다')
 
         # 네이버 지역 정보 option s # 네이버 지역 정보 option s # 네이버 지역 정보 option s # 네이버 지역 정보 option s # 네이버 지역 정보 option s
         INFO_NAME = '네이버 체감온도 정보'
@@ -787,13 +780,13 @@ def AI_respon(usr_input_txt):
         with open(file_path, 'w') as outfile:
             json.dump(json_dict, outfile, indent=4)
 
-        AI_speak(INFO_NAME + '는')
-        AI_speak('________')
-        AI_speak('인 것으로 추측됩니다')
+        print(INFO_NAME + '는')
+        print('________')
+        print('인 것으로 추측됩니다')
 
 
     elif usr_input_txt == '네이버 미세먼지':
-        AI_speak('네이버 미세먼지 정보 웹크롤링을 시도합니다.')
+        print('네이버 미세먼지 정보 웹크롤링을 시도합니다.')
         dataWebLocation = "https://search.naver.com/search.naver?where=nexearch&sm=tab_etc&qvt=0&query=%EC%A0%84%EA%B5%AD%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80"
         copied_html_selector = '#main_pack > section.sc_new._atmospheric_environment > div > div.api_cs_wrap > div > div:nth-child(3) > div.main_box > div.detail_box'
 
@@ -809,41 +802,41 @@ def AI_respon(usr_input_txt):
             "울산", "\n울산").replace("부산", "\n부산").replace("     ", " ").replace("\n ", "\n").replace("  ", " ").replace(
             "  ", " ")
         # print(lines.replace("관측지점 현재 오전예보 오후예보","관측지점 현재 오전예보 오후예보\n"))
-        # AI_speak('웹 크롤링된 네이버 미세먼지 정보 접근을 시도합니다.')
-        # AI_speak('네이버 미세먼지 정보입니다')
-        # AI_speak('다음은 네이버 미세먼지 정보입니다')
-        # AI_speak('관측지점 현재 오전예보 오후예보')
-        # AI_speak('웹 크롤링된 네이버 미세먼지 정보를 말씀드립니다')
-        AI_speak('웹크롤링이 완료되었습니다')
-        AI_speak('서울과 경기도에 대한 정보를 말씀드립니다')
+        # print('웹 크롤링된 네이버 미세먼지 정보 접근을 시도합니다.')
+        # print('네이버 미세먼지 정보입니다')
+        # print('다음은 네이버 미세먼지 정보입니다')
+        # print('관측지점 현재 오전예보 오후예보')
+        # print('웹 크롤링된 네이버 미세먼지 정보를 말씀드립니다')
+        print('웹크롤링이 완료되었습니다')
+        print('서울과 경기도에 대한 정보를 말씀드립니다')
 
         # for line in range(0,len(lines.split('\n'))):
-        # AI_speak(lines.split('\n')[line])
+        # print(lines.split('\n')[line])
 
         # for line in range(0,len(lines.split(' '))):
-        # AI_speak(lines.split(' ')[line].strip())
+        # print(lines.split(' ')[line].strip())
 
         for line in range(0, len(lines.split('\n'))):
             if '서울' in lines.split('\n')[line]:
                 tmp = lines.split('\n')[line].split(' ')
                 for i in range(0, len(tmp) - 3):
-                    AI_speak(tmp[i])
+                    print(tmp[i])
 
             if '경기' in lines.split('\n')[line]:
                 tmp = lines.split('\n')[line].split(' ')
                 for i in range(0, len(tmp) - 3):
-                    AI_speak(tmp[i])
+                    print(tmp[i])
 
     elif usr_input_txt == '가용코드목록':
         AI_print(AI_available_cmd_code_list)
-        AI_speak("조회되었습니다")
+        print("조회되었습니다")
 
     # elif usr_input_txt == 'voiceless mode':
-    # def AI_speak(text):
+    # def print(text):
     # print(text)
 
     # elif usr_input_txt == 'voice mode':
-    # def AI_speak(text):
+    # def print(text):
     # address=os.getcwd()+'\\mp3\\'+ text +'.mp3'
 
     # if os.path.exists(address):
@@ -866,49 +859,49 @@ def AI_respon(usr_input_txt):
     # taskkill('ALSong.exe')
 
     # elif usr_input_txt == '`':
-    #     AI_speak('single mode 가 시작되었습니다')
+    #     print('single mode 가 시작되었습니다')
     #     # print('single mode s single mode s single mode s single mode s single mode s single mode s single mode s single mode s single mode s ')
     #     while(True):
     #         batch_mode_input=input('>>>')
     #         if batch_mode_input =='x':
-    #             AI_speak('single mode를 종료합니다')
+    #             print('single mode를 종료합니다')
     #             break
     #         elif len(batch_mode_input)==1:
     #             usr_input_txt=AI_available_cmd_code_list[int(batch_mode_input)-1].split(':')[0]
     #             AI_respon(usr_input_txt)
     #         elif batch_mode_input =='':
-    #             AI_speak('아무것도 입력되지 않았습니다')
+    #             print('아무것도 입력되지 않았습니다')
     #         elif batch_mode_input =='`':
-    #             AI_speak('백팁은 single mode에서 입력하실 수 없습니다.')
+    #             print('백팁은 single mode에서 입력하실 수 없습니다.')
     #         else:
-    #             AI_speak('single mode 에서는 1자리만 입력하실 수 있습니다.')
+    #             print('single mode 에서는 1자리만 입력하실 수 있습니다.')
     #     # print('eingle mode e eingle mode e eingle mode e eingle mode e eingle mode e eingle mode e eingle mode e eingle mode e eingle mode e ')
     #
 
     # elif usr_input_txt == '``':
-    #     AI_speak('batch mode 가 시작되었습니다')
+    #     print('batch mode 가 시작되었습니다')
     #     # print('batch mode s batch mode s batch mode s batch mode s batch mode s batch mode s batch mode s batch mode s batch mode s ')
     #     while(True):
     #         batch_mode_input=input('>>>')
     #         if batch_mode_input=='x' or batch_mode_input=='X' :
-    #             AI_speak('batch mode를 종료합니다')
+    #             print('batch mode를 종료합니다')
     #             break
     #         # batch_mode_input=list(batch_mode_input)                         # batch_mode_input = [3,2,1]
-    #         # AI_speak('입력된 배치명령의 개수는' + str(len(batch_mode_input)+1) +'개 입니다')
+    #         # print('입력된 배치명령의 개수는' + str(len(batch_mode_input)+1) +'개 입니다')
     #         if batch_mode_input == '':
-    #             AI_speak('아무것도 입력되지 않았습니다')
-    #             AI_speak('명령코드를 입력해주세요')
+    #             print('아무것도 입력되지 않았습니다')
+    #             print('명령코드를 입력해주세요')
     #         else:
-    #             AI_speak('입력된 배치명령의 개수는' + str(len(batch_mode_input)) +'개 입니다')
+    #             print('입력된 배치명령의 개수는' + str(len(batch_mode_input)) +'개 입니다')
     #             for i in range(0,len(batch_mode_input)):                      # i=0
     #                 usr_input_txt=AI_available_cmd_code_list[int(batch_mode_input[i])-1].split(':')[0] #usr_input_txt=AI_available_cmd_code_list[2].split(':')[0]
-    #                 AI_speak(str(i+1)+'번째 코드를 실행시도합니다')
+    #                 print(str(i+1)+'번째 코드를 실행시도합니다')
     #                 AI_respon(usr_input_txt)
     #
     #     # print('batch mode e batch mode e batch mode e batch mode e batch mode e batch mode e batch mode e batch mode e batch mode e ')
 
     elif usr_input_txt == '`':
-        AI_speak('advanced batch mode 가 시작되었습니다')
+        print('advanced batch mode 가 시작되었습니다')
         print('advanced batch mode s advanced batch mode s advanced batch mode s advanced batch mode s advanced batch mode s advanced batch mode s advanced batch mode s')
         cls()
         print("")
@@ -923,19 +916,19 @@ def AI_respon(usr_input_txt):
         while (True):
             batch_mode_input = input("                                                                                                ")
             if batch_mode_input == 'x' or batch_mode_input == 'X':
-                AI_speak('advanced batch mode를 종료합니다')
+                print('advanced batch mode를 종료합니다')
                 break
             elif batch_mode_input == '':
-                AI_speak('아무것도 입력되지 않았습니다')
-                AI_speak('명령코드를 입력해주세요')
+                print('아무것도 입력되지 않았습니다')
+                print('명령코드를 입력해주세요')
             else:
                 list = batch_mode_input.split(' ')
-                # AI_speak('입력된 코드 목록 입니다')
+                # print('입력된 코드 목록 입니다')
                 # for str in list:
-                #     AI_speak(str)
+                #     print(str)
                 # for i in range(0,len(list)-2):
                 for list_element in list:
-                    # AI_speak(str((i+1))+'번째 코드를 실행시도합니다')
+                    # print(str((i+1))+'번째 코드를 실행시도합니다')
                     # print(list[i])
                     # AI_respon(str(list[i]))
                     # if len(AI_available_cmd_code_list)<AI_available_cmd_code_list[int(list[i])-1].split(':')[0]:
@@ -945,56 +938,56 @@ def AI_respon(usr_input_txt):
                     #     if usr_input_txt in AI_available_cmd_code_list[i].split(':')[0]:
                     #         # if usr_input_txt!='' or usr_input_txt!='`':
                     #         if usr_input_txt != '':
-                    #             # AI_speak(AI_available_cmd_code_list[i].split(':')[0]+'에 대한 명령코드가 입력되었습니다')
+                    #             # print(AI_available_cmd_code_list[i].split(':')[0]+'에 대한 명령코드가 입력되었습니다')
                     #             pass
                     #
                     # AI_respon(usr_input_txt)
                     # try:
                     # print(len(AI_available_cmd_code_list[int(list_element) - 1]))
                     # print(AI_available_cmd_code_list[int(list_element) - 1])
-                    # AI_speak(AI_available_cmd_code_list[int(list_element) - 1].split(':')[0])
+                    # print(AI_available_cmd_code_list[int(list_element) - 1].split(':')[0])
                     try:
                         AI_respon(AI_available_cmd_code_list[int(list_element) - 1].split(':')[0])
                     except Exception as e:  # 모든 예외의 에러 메시지를 출력할 때는 Exception을 사용
-                        AI_speak('advanced batch mode 실행 중 예외가 발생했습니다')
+                        print('advanced batch mode 실행 중 예외가 발생했습니다')
                         print('advanced batch mode 실행 중 예외가 발생했습니다')
                         print(e)
-                        # AI_speak('가용코드 목록에 없는 코드입니다')
+                        # print('가용코드 목록에 없는 코드입니다')
 
         print('advanced batch mode e advanced batch mode e advanced batch mode e advanced batch mode e advanced batch mode e advanced batch mode e advanced batch mode e')
 
 
     elif usr_input_txt == '가용명령개수':
-        AI_speak('가용명령의 개수는')
-        AI_speak(str(len(AI_available_cmd_code_list)))
-        AI_speak('개 입니다')
+        print('가용명령의 개수는')
+        print(str(len(AI_available_cmd_code_list)))
+        print('개 입니다')
         AI_respon('3 ')
 
     elif usr_input_txt == '식물조언':
-        AI_speak('식물에게 물샤워를 줄시간입니다')
-        AI_speak('물샤워를 시켜주세요')
-        AI_speak('오늘은 식물에게 햇빛샤워를 시켜주는날입니다')
-        AI_speak('하늘이가 없을때 샤워를 시켜주세요')
-        AI_speak('하트축전에게 빠르게 식물등빛을 주세요')
-        AI_speak('이러다 죽습니다')
-        AI_speak('서둘러 등빛을 주세요')
+        print('식물에게 물샤워를 줄시간입니다')
+        print('물샤워를 시켜주세요')
+        print('오늘은 식물에게 햇빛샤워를 시켜주는날입니다')
+        print('하늘이가 없을때 샤워를 시켜주세요')
+        print('하트축전에게 빠르게 식물등빛을 주세요')
+        print('이러다 죽습니다')
+        print('서둘러 등빛을 주세요')
 
     elif usr_input_txt == '':
-        AI_speak('아무것도 입력되지 않았습니다')
-        AI_speak('명령코드를 입력해주세요')
+        print('아무것도 입력되지 않았습니다')
+        print('명령코드를 입력해주세요')
 
     elif usr_input_txt == '몇 시야' or usr_input_txt == '몇시야':
-        # AI_speak(getTimeAsStyle('5'))
-        # AI_speak('년')
-        # AI_speak(getTimeAsStyle('6'))
-        # AI_speak('월')
-        # AI_speak(getTimeAsStyle('7'))
-        # AI_speak('일')
-        AI_speak(getTimeAsStyle('8'))
-        AI_speak('시')
-        AI_speak(getTimeAsStyle('9'))
-        AI_speak('분')
-        AI_speak('입니다')
+        # print(getTimeAsStyle('5'))
+        # print('년')
+        # print(getTimeAsStyle('6'))
+        # print('월')
+        # print(getTimeAsStyle('7'))
+        # print('일')
+        print(getTimeAsStyle('8'))
+        print('시')
+        print(getTimeAsStyle('9'))
+        print('분')
+        print('입니다')
 
     elif usr_input_txt == 'jhppc1':
         jhppc1 = 'https://remotedesktop.google.com/access/session/b797cd99-b738-f4db-9b38-9a2e25a57a47'
@@ -1006,25 +999,25 @@ def AI_respon(usr_input_txt):
 
     elif usr_input_txt == 'sd_s':
         ment="정말로 컴퓨터를 종료할까요 원하시면 Y를 눌러주세요"
-        AI_speak(ment)
+        print(ment)
         usr_input_txt=input(ment)
         if usr_input_txt.upper() == 'Y':
             ment='시스템 종료를 시도합니다'
 
-            # AI_speak('1시간 뒤 s')
-            AI_speak(ment)
+            # print('1시간 뒤 s')
+            print(ment)
             # os.system('shutdown /s /t 3600')  # 1시간 뒤
-            # AI_speak('1시간 뒤 e')
+            # print('1시간 뒤 e')
 
-            # AI_speak('즉시 s')
-            AI_speak(ment)
+            # print('즉시 s')
+            print(ment)
             os.system('shutdown /s /t 0')  # 즉시
-            # AI_speak('즉시 e')
+            # print('즉시 e')
 
-            # AI_speak('10분 뒤')
-            AI_speak(ment)
+            # print('10분 뒤')
+            print(ment)
             # os.system('shutdown /s /t 600') #10분 뒤
-            # AI_speak('10분 뒤')
+            # print('10분 뒤')
         else:
             pass
 
@@ -1039,7 +1032,7 @@ def AI_respon(usr_input_txt):
         cls()
 
     elif usr_input_txt == '스케쥴 모드':
-        AI_speak('스케쥴 모드를 시작합니다')
+        print('스케쥴 모드를 시작합니다')
         cnt = 0
         started_time = 0
         while (True):
@@ -1052,9 +1045,9 @@ def AI_respon(usr_input_txt):
             ss = getTimeAsStyle('10')
 
             if cnt == 0:
-                # AI_speak('while routine에 접근을 시도합니다')
+                # print('while routine에 접근을 시도합니다')
                 started_time = getTimeAsStyle('0')
-                # AI_speak('컴퓨터와 대화할 준비가 되었습니다')
+                # print('컴퓨터와 대화할 준비가 되었습니다')
                 # taskkill('ALSong.exe')
                 cnt += 1
                 cls()
@@ -1063,98 +1056,98 @@ def AI_respon(usr_input_txt):
             if ss == '30':
                 # 5분마다 말하기 s
                 # if int(mm)%'05'==0:
-                # AI_speak('현재 시간은')
-                # AI_speak(HH+'시')
-                # AI_speak(mm+'분')
-                # AI_speak('입니다')
+                # print('현재 시간은')
+                # print(HH+'시')
+                # print(mm+'분')
+                # print('입니다')
                 # 5분마다 말하기 e
 
                 # 10분마다 말하기 s
                 # if int(mm)%'10'==0:
-                # AI_speak('현재 시간은')
-                # AI_speak(HH+'시')
-                # AI_speak(mm+'분')
-                # AI_speak('입니다')
+                # print('현재 시간은')
+                # print(HH+'시')
+                # print(mm+'분')
+                # print('입니다')
                 # 10분마다 말하기 e
 
                 # 9시에서 11시 사이에는 15분마다 말하기 s
                 # if 9 <= int(HH) and int(HH) <= 23 and int(mm) % 15 == 0:
                 if 9 <= int(HH) <= 23 and int(mm) % 15 == 0:  # 파이썬은 간결하게 이런것도 됩니다
-                    AI_speak('현재 시간은')
-                    AI_speak(HH + '시')
-                    AI_speak(mm + '분')
-                    AI_speak('입니다')
+                    print('현재 시간은')
+                    print(HH + '시')
+                    print(mm + '분')
+                    print('입니다')
                 # 9시에서 11시 사이에는 15분마다 말하기 e
 
                 # 아침 6시 부터는 5분마다 시간 말하기 s
                 if HH == '06' and int(mm) % 5 == 0:
-                    AI_speak('현재 시간은')
-                    AI_speak(HH + '시')
-                    AI_speak(mm + '분')
-                    AI_speak('입니다')
+                    print('현재 시간은')
+                    print(HH + '시')
+                    print(mm + '분')
+                    print('입니다')
                 # 아침 6시 부터는 5분마다 시간 말하기 e
 
                 # 아침 7시 부터는 5분마다 시간 말하기 s
                 if HH == '07' and int(mm) % 5 == 0:
-                    AI_speak('현재 시간은')
-                    AI_speak(HH + '시')
-                    AI_speak(mm + '분')
-                    AI_speak('입니다')
+                    print('현재 시간은')
+                    print(HH + '시')
+                    print(mm + '분')
+                    print('입니다')
                 # 아침 7시 부터는 5분마다 시간 말하기 e
 
                 # 아침 8시에 시간 말하기 s
                 if HH == '08' and mm == '00':
-                    AI_speak('현재 시간은')
-                    AI_speak(HH + '시')
-                    AI_speak(mm + '분')
-                    AI_speak('입니다')
-                    AI_speak('더이상 나가는 것을 지체하기 어렵습니다')
+                    print('현재 시간은')
+                    print(HH + '시')
+                    print(mm + '분')
+                    print('입니다')
+                    print('더이상 나가는 것을 지체하기 어렵습니다')
                 # 아침 8시에 시간 말하기 e
 
                 # 아침 6시에 30분에 음악재생하기
                 if HH == '06' and mm == '30':
-                    AI_speak('음악을 재생합니다')
+                    print('음악을 재생합니다')
                     AI_run()
                     # [TO DO]
 
                 if HH == '08' and mm == '50':
-                    AI_speak('업무시작 10분전입니다')
-                    AI_speak('업무준비를 시작하세요')
+                    print('업무시작 10분전입니다')
+                    print('업무준비를 시작하세요')
                     # [TO DO]
 
                 if HH == '09' and mm == '00':
-                    AI_speak('음악을 종료합니다')
+                    print('음악을 종료합니다')
                     # taskkill('Music.UI.exe')
                     # taskkill('ALSong.exe')
                     # time.sleep(10)
                     # [TO DO]
 
                 if HH == '11' and mm == '30':
-                    AI_speak('점심시간입니다')
+                    print('점심시간입니다')
                     # [TO DO]
 
                 if HH == '11' and mm == '30':
-                    AI_speak('음악을 재생합니다')
+                    print('음악을 재생합니다')
                     # [TO DO]
 
                 if HH == '11' and mm == '30':
-                    AI_speak('12시 30분 입니다')
-                    AI_speak('씻으실 것을 추천드립니다')
-                    AI_speak('샤워루틴을 수행하실 것을 추천드립니다')
-                    # AI_speak('샤워루틴을 보조를 수행할까요')
+                    print('12시 30분 입니다')
+                    print('씻으실 것을 추천드립니다')
+                    print('샤워루틴을 수행하실 것을 추천드립니다')
+                    # print('샤워루틴을 보조를 수행할까요')
                     # [TO DO]
 
                 if HH == '11' and mm == '50':
-                    AI_speak('12시 10분 전입니다')
-                    AI_speak('누우실 것을 추천드립니다')
-                    # AI_speak('주무실 것을 추천드립니다')
+                    print('12시 10분 전입니다')
+                    print('누우실 것을 추천드립니다')
+                    # print('주무실 것을 추천드립니다')
                     # [TO DO]
 
                 # 30분 마다 랜덤기기(뽑기)를 의도한 수 나오면 프로그램 시작 경과시간 말하기
                 if mm%30 == 0:
                     go_or_no_go = random.randrange(1, 101) # 1에서 100 사이의 수
                     if go_or_no_go == 55 or 58 or 100:
-                        AI_speak('랜덤 수와 의도한 수가 일치합니다')
+                        print('랜덤 수와 의도한 수가 일치합니다')
 
                         print('프로그램을 시작시간은')
                         print(started_time.split(' ')[0])#년
@@ -1181,39 +1174,39 @@ def AI_respon(usr_input_txt):
                         print(mm)
                         print('분')
 
-                        AI_speak('프로그램을 경과시각은')#경과일  ,   경과시각,   경과분,  모두 연산이 고민이 필요한 것 같다
+                        print('프로그램을 경과시각은')#경과일  ,   경과시각,   경과분,  모두 연산이 고민이 필요한 것 같다
                         delta_yyyy = str(float(yyyy) - float(started_time.split(' ')[0]))
-                        AI_speak(delta_yyyy+'년')
+                        print(delta_yyyy+'년')
 
                         delta_MM = str(float(MM) - float(started_time.split(' ')[1]))
-                        AI_speak(delta_MM+'월')
+                        print(delta_MM+'월')
 
                         delta_dd = str(float(dd) - float(started_time.split(' ')[2]))
-                        AI_speak(delta_dd+'일')
+                        print(delta_dd+'일')
 
                         delta_HH = str(float(HH) - float(started_time.split(' ')[3]))
-                        AI_speak(delta_HH+'시')
+                        print(delta_HH+'시')
 
                         delta_mm = str(float(mm) - float(started_time.split(' ')[4]))
-                        AI_speak(delta_mm+'분')
+                        print(delta_mm+'분')
 
-                        AI_speak('프로그램을 시작한지')
-                        AI_speak(delta_yyyy+'년')
-                        AI_speak(delta_MM+'월')
-                        AI_speak(delta_dd+'일')
-                        AI_speak(delta_HH+'시')
-                        AI_speak(delta_mm+'분')
-                        AI_speak('으로 추측됩니다')
+                        print('프로그램을 시작한지')
+                        print(delta_yyyy+'년')
+                        print(delta_MM+'월')
+                        print(delta_dd+'일')
+                        print(delta_HH+'시')
+                        print(delta_mm+'분')
+                        print('으로 추측됩니다')
 
                         # [TO DO]
 
 
     elif usr_input_txt == '_________':
-        AI_speak('해당 기능은 아직 준비되지 않았습니다')
+        print('해당 기능은 아직 준비되지 않았습니다')
 
     else:
-        # AI_speak('입력하신 내용이 usr_input_txt 는 oooo 과 유사합니다') #[to do]
-        # AI_speak('해당 기능은 아직 준비되지 않았습니다')
+        # print('입력하신 내용이 usr_input_txt 는 oooo 과 유사합니다') #[to do]
+        # print('해당 기능은 아직 준비되지 않았습니다')
         available_no_cmd_list = []
         try:
             for i in range(0, len(AI_available_cmd_code_list)):
@@ -1222,13 +1215,13 @@ def AI_respon(usr_input_txt):
             print(available_no_cmd_list)
 
             if int(usr_input_txt) in available_no_cmd_list:
-                # AI_speak(str(available_no_cmd_list)+' 중에 하나라면 실행 가능한 코드입니다')
-                # AI_speak(usr_input_txt+' 가용목록 인덱스가 입력되었습니다.')
-                AI_speak('가용목록 인덱스가 입력되었습니다.')
-                AI_speak('인덱스에 대한 코드를 수행합니다')
+                # print(str(available_no_cmd_list)+' 중에 하나라면 실행 가능한 코드입니다')
+                # print(usr_input_txt+' 가용목록 인덱스가 입력되었습니다.')
+                print('가용목록 인덱스가 입력되었습니다.')
+                print('인덱스에 대한 코드를 수행합니다')
 
                 # [TO_DO s]
-                AI_speak(
+                print(
                     '이 다음코드는 더이상 진행되지 않게. 루프의 처음부분으로 돌아가도록 리턴을 시키는 임시대응코드 입니다. 추후에 삭제를 하고. 엔덱스에 따라 작동하도록 다른 것으로 대체할 것 입니다')
                 usr_input_txt = 'pass'
                 # [TO_DO e]
@@ -1238,40 +1231,19 @@ def AI_respon(usr_input_txt):
 
         except Exception as e:
             print('______________________________________________________  error id 2023 02 18 13 58 s')
-            print('______________________________________________________  e info s')
-            print(e)
-            print('______________________________________________________  e info e')
-            print('______________________________________________________  trouble shooting info s')
-            traceback.print_exc(file=sys.stdout)
-            print('______________________________________________________  trouble shooting info e')
+            # :: trouble shooting
+            print(f':: trouble shooting id : 20231129111853')
+            print(f'e : {e}')
+            print(f'traceback.print_exc(file=sys.stdout) : {traceback.print_exc(file=sys.stdout)}')
+            # traceback.print_exc(file=sys.stdout)
             print('______________________________________________________  error id 2023 02 18 13 58 e')
-            AI_speak('익셉션이 발생하였습니다. 익셉션을 발생시키고 넘어가도록 하는 것은. 익셉션을 발생시키지 않고 처리하는 것보다 좋은 방법은 아닌 것 같습니다. 추후에 수정을 해주세요. 일단은 진행합니다')
-            # AI_speak('익셉션이 발생하였습니다')
-            # AI_speak('익셉션을 발생시키고 넘어가도록 하는 것은 익셉션을 발생시키지 않고 처리하는 것보다 좋은 방법은 아닌 것 같습니다')
-            # AI_speak('추후에 수정을 해주세요')
-            # AI_speak('일단은 진행합니다')
+            print('익셉션이 발생하였습니다. 익셉션을 발생시키고 넘어가도록 하는 것은. 익셉션을 발생시키지 않고 처리하는 것보다 좋은 방법은 아닌 것 같습니다. 추후에 수정을 해주세요. 일단은 진행합니다')
+            # print('익셉션이 발생하였습니다')
+            # print('익셉션을 발생시키고 넘어가도록 하는 것은 익셉션을 발생시키지 않고 처리하는 것보다 좋은 방법은 아닌 것 같습니다')
+            # print('추후에 수정을 해주세요')
+            # print('일단은 진행합니다')
 
-
-def AI_speak(text):
-    address = os.getcwd() + '\\mp3\\' + text + '.mp3'
-    # :: 가지고 있는 mp3 파일 확인
-    if os.path.exists(address):
-        os.system('call "' + address + '"')  # SUCCESS[경로공백포함 시 인식처리]
-        
-    else:
-        mgr_gTTS = gTTS(text=text, lang='ko')
-        mgr_gTTS.save('./mp3/' + text + '.mp3')
-        os.system('call "' + address + '"')  # call을 사용해서 동기처리를 기대했으나 되지 않음.대안이 필요하다.
-
-    # :: mp3 파일의 재생 길이 만큼 대기 
-    length_of_mp3 = get_length_of_mp3(address)
-    length_of_mp3 = float(length_of_mp3)
-    length_of_mp3 = round(length_of_mp3, 1)
-    # time.sleep(length_of_mp3*0.95)
-    # time.sleep(length_of_mp3*1.00)
-    time.sleep(length_of_mp3 * 1.05)
-
-    taskkill('ALSong.exe')
+ 
 
 
 def AI_listen():
@@ -1281,7 +1253,7 @@ def AI_listen():
     # with sr.Microphone() as source:
 
     with m as source:
-        # AI_speak('듣고 있습니다')
+        # print('듣고 있습니다')
         print('듣고 있습니다')
         audio = r.listen(source)
 
@@ -1294,10 +1266,10 @@ def AI_listen():
         # text=r.recognize_sphinx(audio, language='ko')  #안되는데  
         print(text)
     except sr.UnknownValueError:
-        # AI_speak('언노운 익셉션이 발생하였습니다')
+        # print('언노운 익셉션이 발생하였습니다')
         print('언노운 익셉션이 발생하였습니다')
     except sr.RequestError as e:
-        # AI_speak('리퀘스트 익셉션이 발생하였습니다')
+        # print('리퀘스트 익셉션이 발생하였습니다')
         print('리퀘스트 익셉션이 발생하였습니다')
         # print('에러 코드 : {0}'.format(e))
         # print('에러 가능 원인 : API Key 에러, 네트워크 단절, 등')
@@ -1406,8 +1378,8 @@ def convert_path_style(path_str, style_no):
             return path_str
 
     else:
-        AI_speak('trouble shooting info id')
-        AI_speak('yyyy MM dd HH mm ss')
+        print('trouble shooting info id')
+        print('yyyy MM dd HH mm ss')
 
 
 def get_length_by_using_(______tuple):  # done
@@ -1425,50 +1397,10 @@ def print_key_with_index_by_using_(______tuple):
     for ______tuple_key in get_keys_by_using_(______tuple, "as_list"):
         print(str(get_keys_by_using_(______tuple, "as_list").index(______tuple_key)) + " " + ______tuple_key)
 
-def get_values_by_using_(______tuple, _____as):
-    if _____as == magical_words['as_str']:
-        index_cnt=0
-        tmp_str=""
-        for key, value in ______tuple.items():
-            if tmp_str!="":
-                tmp_str=tmp_str+"\n"
-            tmp_str=tmp_str+str(value)
-            index_cnt++1
-        return tmp_str
-    if _____as == magical_words['as_list']:
-        index_cnt=0
-        tmp_list=[]
-        for key, value in ______tuple.items():
-            tmp_list.append(str(value))
-            index_cnt++1
-        return tmp_list
-def print_index_and_value_and_key_by_using_(______tuple, mode):
-    if mode == magical_words[1]:
-        index_cnt=0
-        tmp_str=""
-        for key, value in ______tuple.items():
-            tmp_str=str(index_cnt)+"\t"+str(key)
-            print(tmp_str)
-            index_cnt=index_cnt+1
-    elif mode == magical_words[2]:
-        index_cnt = 0
-        tmp_str = ""
-        for key, value in ______tuple.items():
-            tmp_str = str(index_cnt) + "\t" + str(value)
-            print(tmp_str)
-            index_cnt = index_cnt + 1
-    elif mode == magical_words[3]:
-        index_cnt = 0
-        tmp_str = ""
-        for key, value in ______tuple.items():
-            tmp_str = str(index_cnt) + "\t" + str(key) + "\t" + str(value)
-            print(tmp_str)
-            index_cnt = index_cnt + 1
-    else:
-        print("it is not magical word. so do nothing")
-def getText_by_using_(_____list, _____mode):
-    if _____mode==magical_words["as_tuple"]:
-        print("_________________________________________ TBD")
+
+    
+
+
 
 def replace_text_B_and_text_C_interchangeably_at_text_A_by_using_(____text_A, ____text_B, ____text_C, _____and):
     tmp_foo = "{{kono foo wa sekai de uituna mono ni motomo chikai desu}}"
@@ -1506,14 +1438,6 @@ def replace_text_B_and_text_C_interchangeably_at_text_A_by_using_(____text_A, __
         ____text_A=____text_A.replace(____text_C, tmp_foo)
         ____text_A=____text_A.replace(____text_B, ____text_C)
         ____text_A=____text_A.replace(tmp_foo, ____text_B)
-    if _____and == magical_words["and_do_nothing"]:  # void mode
-        pass
-    elif _____and == magical_words["and_get_it"]:  # return mode
-        return ____text_A
-    elif _____and == magical_words["and_print"]:  # print mode
-        print(____text_A)
-    else:
-        print("it is not magical word. so do nothing")
 
 def act_via_interchangeable_triangle_model_by_using_(____text_A, ____text_B, ____text_C, _____and):
     tmp_foo = "{{kono foo wa sekai de uituna mono ni motomo chikai desu}}"
@@ -1523,14 +1447,7 @@ def act_via_interchangeable_triangle_model_by_using_(____text_A, ____text_B, ___
         ____text_A=____text_A.replace(____text_C, tmp_foo)
         ____text_A=____text_A.replace(____text_B, ____text_C)
         ____text_A=____text_A.replace(tmp_foo, ____text_B)
-    if _____and == magical_words["and_do_nothing"]:  # void mode
-        pass
-    elif _____and == magical_words["and_get_it"]:  # return mode
-        return ____text_A
-    elif _____and == magical_words["and_print"]:  # print mode
-        print(____text_A)
-    else:
-        print("it is not magical word. so do nothing")
+    
 
 def pause():
     try:
@@ -1574,14 +1491,8 @@ try:
     ]
 except Exception as e:
     files_to_back_up = [
-        r"C:\Users\WIN10PROPC3\Desktop\`workspace\private.toml"
+        r"%USERPROFILE%\Desktop\`workspace\private.toml"
     ]
-    # :: e info
-    print(f'e info : {e}')
-    # :: trouble shooting info
-    print(f'traceback.print_exc(file=sys.stdout) : {traceback.print_exc(file=sys.stdout)}')
-    print(f'error id 2023 02 18 23 36')
-    pass
  
 
 # :: 로깅
@@ -1597,10 +1508,10 @@ while(True):
         file_n = os.path.basename(file_abspath).split(".")[0]
         try:
             file_x = os.path.basename(file_abspath).split(".")[1]
-        except:
+        except Exception as e:
             file_x=""
         file_bkup = file_n + '.zip'
-        file_log = 'bkup.log'
+        file_log = 'success.log'
         file_bkup_with_timestamp = file_n + ' - ' + getTimeAsStyle("0") + '.zip'
 
         # 콘솔 화면 정리
@@ -1633,13 +1544,12 @@ while(True):
 
         # :: 로깅 
         bkup_try_cnt = bkup_try_cnt+ 1
-        ment = f"{str(bkup_try_cnt)} 번 째 백업이 시도되었습니다.    {file_bkup_with_timestamp}"
-        print(ment)
+        print(f"{str(bkup_try_cnt)} 번 째 백업완료         src: {file_bkup_with_timestamp}")
         print('')
         print('')
         print('')
         os.chdir(directory_to_back_up)
-        os.system(f'echo "{ment}" >> {file_log}"')
+        os.system(f'echo "bkup_try_cnt: {bkup_try_cnt}         src: {file_bkup_with_timestamp}" >> {file_log}"')
         
         # :: 현재 디렉토리에서 zip 확장자 파일만 문자열 리스트로 출력
         lines = subprocess.check_output('dir /b /a-d *.zip', shell=True).decode('utf-8').split("\n")
@@ -1659,7 +1569,7 @@ while(True):
                         destination = directory_to_back_up+ '\\.old'
                         try:
                             os.makedirs(destination)   
-                        except:
+                        except Exception as e:
                             pass
 
                         
@@ -1677,15 +1587,16 @@ while(True):
                                 src = convert_path_style(os.path.abspath(line.strip()), "/")
                                 destination = convert_path_style(os.path.abspath(destination), "/")
                                 shutil.move(src, destination) 
-                                print(f"{'해당 파일 파일자동정리되었습니다'} ,src: {src} ,destination: {destination}")
-                            except:
-                                traceback.print_exc(file=sys.stdout)
-
+                                print(f"{'파일자동정리완료'}         src: {src}       destination: {destination}")
+                            except Exception as e:
+                                # :: trouble shooting
+                                print(f':: trouble shooting id : 20231129111853')
+                                print(f'e : {e}')
+                                print(f'traceback.print_exc(file=sys.stdout) : {traceback.print_exc(file=sys.stdout)}')
+                                # traceback.print_exc(file=sys.stdout)
     # 1분 대기
     time.sleep(60)
 
-    # 
-    AI_speak('fake AI 를 종료합니다')
 
     # 콘솔 화면 정리
     os.system('cls') 

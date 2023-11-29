@@ -45,10 +45,10 @@ cls
 :: 프로젝트로 이동
 cd "C:\Users\WIN10PROPC3\Desktop\services\helper-from-x-to-back_up"
 
-:: venv running
+:: 파이썬 가상환경 실행
 call ".venv\Scripts\activate.bat"
 
-:: run python program
+:: 파이썬 프로그램 실행
 py ".\helper.py" 
 
 
