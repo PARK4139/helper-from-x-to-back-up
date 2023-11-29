@@ -50,6 +50,7 @@ call ".venv\Scripts\activate.bat"
 
 :: 파이썬 프로그램 실행
 py ".\helper.py" 
+:: python helper.py "%USERPROFILE%\Desktop\services\helper-from-x-to-back_up\success.log"
 
 
 :: debugging
