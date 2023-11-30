@@ -196,22 +196,11 @@ def all_info():
 
 
 
-
-def chdir(path):
-    os.chdir(path)
-
-
 def dir():
     for i in os.listdir():
         # print(i, end = " ")
         print(i)  
 
-def mkdir(path):
-    os.mkdir(path)
-
-
-def mkdirtree(path):
-    os.mkdirs(path)
 
 
 def get_length_of_mp3(target_address):
@@ -273,8 +262,6 @@ def readFile(fileAddress):
         readed_text = f.read()
     return readed_text
 
-def pause():
-    os.system("pause")
 
 
 def listen(recognizer, audio):
@@ -1457,7 +1444,6 @@ def pause():
     except Exception as e:
         print('______________________________________________________  error id 2023 02 18 23 36 s')
         traceback.print_exc(file=sys.stdout)
-        print("it is not magical word. so do nothing")
         print('______________________________________________________  error id 2023 02 18 23 36 e')
 
 
