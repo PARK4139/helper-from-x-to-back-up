@@ -1491,7 +1491,7 @@ try:
     ]
 except Exception as e:
     files_to_back_up = [
-        r"%USERPROFILE%\Desktop\`workspace\private.toml"
+        r"C:\Users\WIN10PROPC3\Desktop\`workspace\private.toml"
     ]
  
 
@@ -1502,8 +1502,8 @@ bkup_try_cnt=0
 while(True):
     for file in files_to_back_up:
         # :: 파일명 준비
-        directory_to_back_up = os.path.dirname(file) 
-        directory_parent = os.path.dirname(directory_to_back_up) 
+        destination = os.path.dirname(file) 
+        directory_parent = os.path.dirname(destination) 
         file_abspath = os.path.abspath(file)
         file_n = os.path.basename(file_abspath).split(".")[0]
         try:
@@ -1540,7 +1540,7 @@ while(True):
         os.chdir(directory_parent) 
         subprocess.check_output(f'bz.exe c "{file_bkup}" "{file_abspath}"', shell=True).decode('utf-8').split("\n")
         subprocess.check_output(f'ren "{file_bkup}" "{file_bkup_with_timestamp}"', shell=True).decode('utf-8').split("\n")
-        subprocess.check_output(f'move "{file_bkup_with_timestamp}" "{directory_to_back_up}" ', shell=True).decode('utf-8').split("\n")
+        subprocess.check_output(f'move "{file_bkup_with_timestamp}" "{destination}" ', shell=True).decode('utf-8').split("\n")
 
         # :: 로깅 
         bkup_try_cnt = bkup_try_cnt+ 1
@@ -1548,7 +1548,7 @@ while(True):
         print('')
         print('')
         print('')
-        os.chdir(directory_to_back_up)
+        os.chdir(destination)
         os.system(f'echo "bkup_try_cnt: {bkup_try_cnt}         src: {file_bkup_with_timestamp}" >> {file_log}"')
         
         # :: 현재 디렉토리에서 zip 확장자 파일만 문자열 리스트로 출력
@@ -1566,7 +1566,7 @@ while(True):
                         
 
                         # :: project tree 생성
-                        destination = directory_to_back_up+ '\\.old'
+                        destination = destination+ '\\.old'
                         try:
                             os.makedirs(destination)   
                         except Exception as e:

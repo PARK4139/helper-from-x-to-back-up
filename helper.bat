@@ -49,8 +49,8 @@ cd "C:\Users\WIN10PROPC3\Desktop\services\helper-from-x-to-back_up"
 call ".venv\Scripts\activate.bat"
 
 :: 파이썬 프로그램 실행
-py ".\helper.py" 
-:: python helper.py "%USERPROFILE%\Desktop\services\helper-from-x-to-back_up\success.log"
+:: python ".\helper.py" 
+python helper.py "C:\Users\WIN10PROPC3\Desktop\박정훈 이력서 2023-10-15.pdf"
 
 
 :: debugging
