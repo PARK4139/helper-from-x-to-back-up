@@ -1,6 +1,5 @@
 # 서비스 묘사(this service)
 - it can back up certain file located per 1 minutes(특정위치의 파일을 1분마다 백업하는 파이썬 프로그램)
-- 
 
 
 # 동작환경(it works in environment below)
