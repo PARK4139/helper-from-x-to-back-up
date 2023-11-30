@@ -60,4 +60,3 @@ explorer https://github.com/PARK4139/%PROJECT_DIRECTORY%
 
 :: debug
 timeout 600
-; pause
