@@ -1,24 +1,26 @@
-REM echo "__________________________________________________________________________________________________ echo s
+:: echo setting
 @echo off
-REM echo "__________________________________________________________________________________________________ echo e
-echo "__________________________________________________________________________________________________ title s
+
+:: title setting
 title %~n0
-echo "__________________________________________________________________________________________________ title e
-echo "__________________________________________________________________________________________________ maximized window s
+
+:: maximized window setting
 if not "%maximized%"=="" goto :maximized
 set maximized=true
 start /max cmd /C "%~dpnx0"
 goto :EOF
 :maximized
-echo "__________________________________________________________________________________________________ maximized window e"
-@REM echo "__________________________________________________________________________________________________ minimized window s
+
+:: minimized window setting
 @REM if not "%minimized%"=="" goto :minimized
 @REM set minimized=true
 @REM start /min cmd /C "%~dpnx0"
 @REM goto :EOF
 @REM :minimized
-@REM echo "__________________________________________________________________________________________________ minimized window e
-@REM echo "__________________________________________________________________________________________________ Admin s"
+
+
+
+:: admin mode setting
 @REM >nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
 @REM if '%errorlevel%' NEQ '0' ( echo Requesting administrative privileges... goto UACPrompt 
 @REM ) else ( goto gotAdmin ) 
@@ -33,11 +35,18 @@ echo "__________________________________________________________________________
 	@REM pushd "%CD%"
 	@REM CD /D "%~dp0"
 @REM :------------------------------------------ below cript will acted as administrator mode ------------------------------------------ 
-@REM echo "__________________________________________________________________________________________________ Admin e"
 
+
+:: console color setting
 color 0a
+
+:: korean encoding setting
 chcp 65001
+
+:: local envrionment mode setting
 setlocal
+
+
 
 :: 콘솔 화면 정리
 cls
@@ -53,5 +62,5 @@ call ".venv\Scripts\activate.bat"
 python helper.py "C:\Users\WIN10PROPC3\Desktop\박정훈 이력서 2023-10-15.pdf"
 
 
-:: debugging
+:: debugging setting
 timeout 600
