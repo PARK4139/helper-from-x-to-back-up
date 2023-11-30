@@ -1,9 +1,8 @@
-![이미지를 찾을 수 없습니다](https://i.esdrop.com/d/ZklKfna5T3.jpg)
-![이미지를 찾을 수 없습니다](https://red-steps.netlify.app/sky1.jpg)
+<!-- ![이미지를 찾을 수 없습니다](https://red-steps.netlify.app/sky1.jpg) -->
 ![이미지를 찾을 수 없습니다](https://red-steps.netlify.app/sky2.jpg)
-![이미지를 찾을 수 없습니다](https://red-steps.netlify.app/sky3.jpg)
-![이미지를 찾을 수 없습니다](https://red-steps.netlify.app/sky4.jpg)
-![이미지를 찾을 수 없습니다](https://red-steps.netlify.app/sky5.jpg)
+<!-- ![이미지를 찾을 수 없습니다](https://red-steps.netlify.app/sky3.jpg) -->
+<!-- ![이미지를 찾을 수 없습니다](https://red-steps.netlify.app/sky4.jpg) -->
+<!-- ![이미지를 찾을 수 없습니다](https://red-steps.netlify.app/sky5.jpg) -->
 ![이미지를 찾을 수 없습니다](https://red-steps.netlify.app/sky6.jpg)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/9ec5eebb-2205-4017-8546-59e69a64ece8/deploy-status)](https://app.netlify.com/sites/red-steps/deploys)
 # 서비스 묘사(THIS SERVICE)
