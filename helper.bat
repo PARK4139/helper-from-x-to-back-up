@@ -55,7 +55,7 @@ cls
 cd "C:\Users\WIN10PROPC3\Desktop\services\helper-from-x-to-back_up"
 
 :: 파이썬 가상환경 실행
-call ".venv\Scripts\activate.bat"
+call ".\.venv\Scripts\activate.bat"
 
 :: 파이썬 프로그램 실행
 :: python ".\helper.py" 
