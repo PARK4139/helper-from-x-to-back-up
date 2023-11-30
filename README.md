@@ -6,19 +6,25 @@
 <!-- ![이미지를 찾을 수 없습니다](https://red-steps.netlify.app/sky5.jpg) -->
 ![이미지를 찾을 수 없습니다](https://red-steps.netlify.app/sky6.jpg)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/9ec5eebb-2205-4017-8546-59e69a64ece8/deploy-status)](https://app.netlify.com/sites/red-steps/deploys)
-# 서비스 묘사(THIS SERVICE)
+# 서비스 설명(THIS SERVICE)
 - 특정위치의 파일을 1분마다 백업하는 파이썬 프로그램(IT CAN BACK UP CERTAIN FILE LOCATED PER 1 MINUTES)
 
 
+
 # 개발환경(IT WORKS IN ENVIRONMENT BELOW)
-- WINDOWS 10 PRO
+- WINDOWS 10 PRO 
 - PYTHON3.10 
 - 반디집(FILE COMPRESSION KOREAN PROGRAM)
 
+# 개발요구사항 체크리스트(DEVELOPMENT REQUIREMENTS CHECKLIST)
+- 특정 위치의 파일의 절대경로를 배치파일의 인자로 받을 것 ✔️
+- main.py 의 명칭은 helper.py 로 대체할 것 ✔️
+- exe 파일로 패키징하여 배포하기
 
-# 개발규칙(DEVELOPMENT RULE)
-- OS 변수를 고빈도로 활용 
-- 상대경로를 고빈도로 활용 
+
+# 개발규칙 체크리스트(DEVELOPMENT RULE CHECKLIST)
+- OS 변수를 고빈도로 활용 ✔️
+- 파이썬 코드 내에서 상대경로를 고빈도로 활용 ✔️
 
 
 # 개발완료사항(DEVELOPMENT DONE)
