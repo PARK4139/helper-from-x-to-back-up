@@ -1531,9 +1531,6 @@ while(True):
         # :: 로깅 
         bkup_try_cnt = bkup_try_cnt+ 1
         print(f"{str(bkup_try_cnt)} 번 째 백업완료         src: {file_bkup_with_timestamp}")
-        print('')
-        print('')
-        print('')
         os.chdir(destination)
         os.system(f'echo "bkup_try_cnt: {bkup_try_cnt}         src: {file_bkup_with_timestamp}" >> {file_log}"')
         
@@ -1575,11 +1572,8 @@ while(True):
                                 shutil.move(src, destination) 
                                 print(f"{'파일자동정리완료'}         src: {src}       destination: {destination}")
                             except Exception as e:
-                                # :: trouble shooting
                                 print(f':: trouble shooting id : 20231129111853')
-                                print(f'e : {e}')
-                                print(f'traceback.print_exc(file=sys.stdout) : {traceback.print_exc(file=sys.stdout)}')
-                                # traceback.print_exc(file=sys.stdout)
+                                traceback.print_exc(file=sys.stdout)
     # 1분 대기
     time.sleep(60)
 
